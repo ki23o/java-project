@@ -1,0 +1,64 @@
+import java.util.Scanner;
+
+class Food {
+    String fname;
+    int fprice;
+
+    Food(String name, int price) {
+        this.fname = name;
+        this.fprice = price;
+    }
+}
+
+class Drink {
+    String dname;
+    int dprice;
+
+    Drink(String name, int price) {
+        this.dname = name;
+        this.dprice = price;
+    }
+}
+
+public class Menu {
+    static Food[] f = new Food[5];
+    static Drink[] d = new Drink[7];
+    static Scanner scanner = new Scanner(System.in);
+
+    static void foodMenu() {
+        f[0] = new Food("Sandwich", 30);
+        f[1] = new Food("Pasta with tomato sauce", 40);
+        f[2] = new Food("Pasta with vegetables", 40);
+        f[3] = new Food("Rice", 45);
+        f[4] = new Food("Rice with Vegetables", 45);
+    }
+
+    static void drinkMenu() {
+        d[0] = new Drink("Coke", 40);
+        d[1] = new Drink("Fanta", 40);
+        d[2] = new Drink("Sprite", 40);
+        d[3] = new Drink("Predator", 45);
+        d[4] = new Drink("Juice", 35);
+        d[5] = new Drink("Milk", 30);
+        d[6] = new Drink("Yoghurt", 25);
+    }
+
+    public static void main(String[] args) {
+        int choice;
+
+        System.out.println("Welcome distinguished customer. What food item would you like?");
+        foodMenu();
+        
+        drinkMenu();
+
+        for (int i = 0; i < 5; i++) {
+            System.out.println("  " + (i + 1) + ". " + f[i].fname + "   " + f[i].fprice);
+            System.out.println("  " + (i + 1) + ". " + d[i].dname + "   " + d[i].dprice);
+        }
+
+        System.out.print("Enter your choice: ");
+        choice = scanner.nextInt();
+
+        // Handle the rest of your program logic here
+    }
+}
