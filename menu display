@@ -62,7 +62,7 @@ public class RestaurantOrder {
                 ch.n = scanner.nextInt();
                 break;
         }
-        if (ch.p <= 0  ch.p >= 7) {
+        if (ch.p <= 0 || ch.p >= 7) {
             System.out.println("Wrong input! Enter again.");
             firstChoice();
         }
@@ -86,7 +86,7 @@ public class RestaurantOrder {
             sizeChoice();
             System.out.print("\nWould you like to order again? y/n: ");
             orderAgain = scanner.next().charAt(0);
-        } while (orderAgain == 'y'  orderAgain == 'Y');
+        } while (orderAgain == 'y' || orderAgain == 'Y');
 
         System.out.println("\nThank You For Ordering From Salem Restaurant!!!");
     }
