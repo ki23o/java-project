@@ -1,0 +1,106 @@
+import java.util.Scanner;
+
+public class PaymentSystem {
+    static Scanner scanner = new Scanner(System.in);
+
+    static void cash() {
+        System.out.println("You can pay to the cashier");
+    }
+
+    static void creditCard() {
+        String name;
+        int pin, cvv, expYear;
+        double cardNo;
+        label:
+        while (true) {
+            System.out.println("Please enter your card number");
+            cardNo = scanner.nextDouble();
+            System.out.println("Please enter the card Expiration year");
+            expYear = scanner.nextInt();
+            if (expYear < 2023) {
+                System.out.println("Sorry, your card has expired");
+                System.out.println("Use another card, please");
+            } else {
+                System.out.println("Please enter the CVV (three-digit number)");
+                cvv = scanner.nextInt();
+                System.out.println("Enter the name on the card");
+                name = scanner.next();
+                System.out.println("Please enter any number to confirm");
+                pin = scanner.nextInt();
+                System.out.println("Your payment is completed");
+                break;
+            }
+        }
+    }
+
+    static void mobileBanking() {
+        int choice;
+        String done;
+        System.out.println("In which mobile banking you want to pay?");
+        System.out.println("[Choice 1] CBE");
+        System.out.println("[Choice 2] Dashen");
+        System.out.println("[Choice 3] Awash");
+        System.out.println("Enter your choice");
+        choice = scanner.nextInt();
+        if (choice == 1) {
+            System.out.println("The account no is 10003456789");
+        } else if (choice == 2) {
+            System.out.println("The account no is 76542890");
+        } else if (choice == 3) {
+            System.out.println("The account number is 4092345766");
+        } else {
+            System.out.println("Wrong choice");
+        }
+        System.out.println("When you complete your payment, please enter any key");
+        done = scanner.next();
+        System.out.println("Your payment is completed");
+    }
+
+    public static void main(String[] args) {
+        String Y;
+        double total, tax, discount, Ttotal, Tdiscount;
+        int choice;
+
+        System.out.println("Are you a student? (y/n)");
+        Y = scanner.next();
+        System.out.println("Enter the total amount");
+        total = scanner.nextDouble();
+
+        // To calculate the 15% tax of the total
+        tax = 0.15 * total;
+        System.out.println("Tax=" + tax);
+        Ttotal = total + tax;
+
+        // Calculate 5% discount if the customer is a student
+        if (Y.equalsIgnoreCase("y")) {
+            discount = Ttotal * 0.05;
+            System.out.println("Discount " + discount);
+            Tdiscount = Ttotal - discount;
+            System.out.println("Total amount is " + Tdiscount);
+        } else {
+            System.out.println("No discount");
+            System.out.println("The total amount is " + Ttotal);
+        }
+
+        System.out.println("How would you like to pay?");
+        System.out.println("[Choice 1] cash");
+        System.out.println("[Choice 2] credit_card");
+        System.out.println("[Choice 3] mobile_banking");
+        System.out.println("Enter your choice");
+        choice = scanner.nextInt();
+
+        switch (choice) {
+            case 1:
+                cash();
+                break;
+            case 2:
+                creditCard();
+                break;
+            case 3:
+                mobileBanking();
+                break;
+            default:
+                System.out.println("Wrong choice");
+        }
+    }
+}
