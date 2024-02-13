@@ -1,0 +1,48 @@
+import java.util.Scanner;
+
+public class RatingSystem {
+    static double totalRating = 0;
+    static int totalUsers = 0;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        char continueRating;
+
+        do {
+            System.out.print("Rate our service from 1 to 5: ");
+            int userRating = scanner.nextInt();
+
+            if (userRating >= 1 && userRating <= 5) {
+                totalRating += userRating;
+                totalUsers++;
+
+
+                System.out.print("Do you want to leave a comment? (y/n): ");
+                char leaveComment = scanner.next().charAt(0);
+                scanner.nextLine();  // Consume the newline character
+
+                if (leaveComment == 'y' || leaveComment == 'Y') {
+                    System.out.print("Enter your comment: ");
+                    String comment = scanner.nextLine();
+                    System.out.println("Thank you for your comment: " + comment);
+                }
+            } else {
+                System.out.println("Invalid rating. Please rate from 1 to 5.");
+            }
+
+            System.out.print("Do you want to continue rating? (y/n): ");
+            continueRating = scanner.next().charAt(0);
+        } while (continueRating == 'y' || continueRating == 'Y');
+
+        displayAverageRating();
+    }
+
+    static void displayAverageRating() {
+        if (totalUsers > 0) {
+            double averageRating = totalRating / totalUsers;
+            System.out.println("Average Rating: " + averageRating);
+        } else {
+            System.out.println("No ratings provided.");
+        }
+    }
+}
