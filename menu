@@ -1,0 +1,245 @@
+import java.util.Scanner;
+
+public class Menu {
+    static Scanner scanner = new Scanner(System.in);
+    static Food[] foodItems = new Food[9];
+    static Drink[] drinkItems = new Drink[7];
+    static Order[] orders = new Order[10];
+    static int orderNo = 0;
+
+    public static void main(String[] args) {
+        System.out.println("Welcome to the Restaurant!");
+
+        // Populate menu items
+        populateMenu();
+
+        int customerChoice;
+        do {
+            displayMainMenu();
+            customerChoice = scanner.nextInt();
+            switch (customerChoice) {
+                case 1:
+                    displayMenu();
+                    placeOrder();
+                    break;
+//                case 2:
+//                    rating();
+//                    break;
+                case 2:
+                    viewOrderHistory();
+                    break;
+                case 3:
+                    System.out.println("Thank you for dining with us!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+        } while (customerChoice != 4);
+    }
+
+    static void displayMainMenu() {
+        System.out.println("\nMAIN MENU");
+        System.out.println("1. Order");
+//        System.out.println("2. Rate our service");
+        System.out.println("2. View order history");
+        System.out.println("3. Exit");
+        System.out.print("Enter your choice: ");
+    }
+
+    static void populateMenu() {
+        // Populate food items
+        foodItems[0] = new Food("Dench", 30);
+        foodItems[1] = new Food("Dench Special", 55);
+        foodItems[2] = new Food("Enkulal Sandwich", 45);
+        foodItems[3] = new Food("Enkulal Sandwich Special", 60);
+        foodItems[4] = new Food("Pasta", 40);
+        foodItems[5] = new Food("Pasta be Soya", 50);
+        foodItems[6] = new Food("Ruz", 35);
+        foodItems[7] = new Food("Ruz be Soya", 45);
+        foodItems[8] = new Food("Soya", 35);
+
+        // Populate drink items
+        drinkItems[0] = new Drink("Coca", 40);
+        drinkItems[1] = new Drink("Fanta", 40);
+        drinkItems[2] = new Drink("Sprite", 40);
+        drinkItems[3] = new Drink("Pridator", 50);
+        drinkItems[4] = new Drink("Juice", 30);
+        drinkItems[5] = new Drink("Milk", 45);
+        drinkItems[6] = new Drink("Yoghurt", 50);
+    }
+
+    static void displayMenu() {
+        System.out.println("\nMENU");
+        System.out.println("................................");
+        System.out.println("Foods");
+        System.out.println("................................");
+        for (int i = 0; i < foodItems.length; i++) {
+            System.out.printf("%-3d%-30s%-5.2f\n", i + 1, foodItems[i].getName(), foodItems[i].getPrice());
+        }
+        System.out.println("................................");
+        System.out.println("Drinks");
+        System.out.println("................................");
+        for (int i = 0; i < drinkItems.length; i++) {
+            System.out.printf("%-3d%-30s%-5.2f\n", i + 1, drinkItems[i].getName(), drinkItems[i].getPrice());
+        }
+        System.out.println("................................");
+    }
+
+    static void placeOrder() {
+        int[] foodSelection = new int[10];
+        int[] foodQuantity = new int[10];
+        int[] drinkSelection = new int[10];
+        int[] drinkQuantity = new int[10];
+        int foodNo = 0, drinkNo = 0;
+        double totalPrice = 0;
+
+        System.out.println("Enter food item number and quantity (0 to finish): ");
+        int foodItemNo;
+        while ((foodItemNo = scanner.nextInt()) != 0) {
+            if (foodItemNo < 1 || foodItemNo > foodItems.length) {
+                System.out.println("Invalid food item number. Please try again.");
+                continue;
+            }
+            foodSelection[foodNo] = foodItemNo;
+            System.out.print("Enter quantity: ");
+            int quantity = scanner.nextInt();
+            foodQuantity[foodNo] = quantity;
+            totalPrice += foodItems[foodItemNo - 1].getPrice() * quantity;
+            foodNo++;
+        }
+
+        System.out.println("Enter drink item number and quantity (0 to finish): ");
+        int drinkItemNo;
+        while ((drinkItemNo = scanner.nextInt()) != 0) {
+            if (drinkItemNo < 1 || drinkItemNo > drinkItems.length) {
+                System.out.println("Invalid drink item number. Please try again.");
+                continue;
+            }
+            drinkSelection[drinkNo] = drinkItemNo;
+            System.out.print("Enter quantity: ");
+            int quantity = scanner.nextInt();
+            drinkQuantity[drinkNo] = quantity;
+            totalPrice += drinkItems[drinkItemNo - 1].getPrice() * quantity;
+            drinkNo++;
+        }
+
+        Order order = new Order(foodSelection, drinkSelection, foodQuantity, drinkQuantity, foodNo, drinkNo, totalPrice);
+        orders[orderNo++] = order;
+        System.out.println("Order placed successfully!");
+    }
+
+    static void rating() {
+        System.out.print("Rate our service from 1 to 5: ");
+        int userRating = scanner.nextInt();
+        if (userRating >= 1 && userRating <= 5) {
+            RatingSystem.totalRating += userRating;
+            RatingSystem.totalUsers++;
+            System.out.print("Do you want to leave a comment? (y/n): ");
+            char leaveComment = scanner.next().charAt(0);
+            scanner.nextLine(); // Consume newline character
+            if (leaveComment == 'y' || leaveComment == 'Y') {
+                System.out.print("Enter your comment: ");
+                String comment = scanner.nextLine();
+                System.out.println("Thank you for your comment: " + comment);
+            }
+            RatingSystem.displayAverageRating();
+        } else {
+            System.out.println("Invalid rating. Please rate from 1 to 5.");
+        }
+    }
+
+    static void viewOrderHistory() {
+        System.out.println("\nORDER HISTORY");
+        if (orderNo == 0) {
+            System.out.println("No orders placed yet.");
+            return;
+        }
+        for (int i = 0; i < orderNo; i++) {
+            System.out.println("Order " + (i + 1));
+            orders[i].displayOrderDetails();
+        }
+    }
+}
+
+class Food {
+    private String name;
+    private double price;
+
+    public Food(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+}
+
+class Drink {
+    private String name;
+    private double price;
+
+    public Drink(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+}
+
+class Order {
+    private int[] food;
+    private int[] drink;
+    private int[] foodQuantity;
+    private int[] drinkQuantity;
+    private int foodNo;
+    private int drinkNo;
+    private double totalPrice;
+
+    public Order(int[] food, int[] drink, int[] foodQuantity, int[] drinkQuantity, int foodNo, int drinkNo, double totalPrice) {
+        this.food = food;
+        this.drink = drink;
+        this.foodQuantity = foodQuantity;
+        this.drinkQuantity = drinkQuantity;
+        this.foodNo = foodNo;
+        this.drinkNo = drinkNo;
+        this.totalPrice = totalPrice;
+    }
+
+    public void displayOrderDetails() {
+        System.out.println("Food Items:");
+        for (int i = 0; i < foodNo; i++) {
+            System.out.println("Item: " + Main.foodItems[food[i] - 1].getName() + ", Quantity: " + foodQuantity[i]);
+        }
+        System.out.println("Drink Items:");
+        for (int i = 0; i < drinkNo; i++) {
+            System.out.println("Item: " + Main.drinkItems[drink[i] - 1].getName() + ", Quantity: " + drinkQuantity[i]);
+        }
+        System.out.println("Total Price: " + totalPrice);
+    }
+}
+
+class RatingSystem {
+    static double totalRating = 0;
+    static int totalUsers = 0;
+
+    public static void displayAverageRating() {
+        if (totalUsers > 0) {
+            double averageRating = totalRating / totalUsers;
+            System.out.println("Average Rating: " + averageRating);
+        } else {
+            System.out.println("No ratings provided.");
+        }
+    }
+}
